@@ -9,18 +9,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userHandler struct {
+type UserHandler struct {
 	userservice service.UserService
 }
 
-func NewUserService(userservice service.UserService)  *userHandler {
-	return &userHandler{
+func NewUserService(userservice service.UserService)  *UserHandler {
+	return &UserHandler{
 		userservice: userservice,
 	}
 }
 
-func (h *userHandler) RegisterUser(c *gin.Context) {
-	var user entity.UserEntity
+func (h *UserHandler) RegisterUser(c *gin.Context) {
+	var user entity.Users
 
 	if err := c.ShouldBindJSON(&user); err!= nil {
         c.JSON(400, gin.H{"error": err.Error()})
@@ -39,7 +39,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	result, err := h.userservice.Register(user.Username, hashedPasswordString, user.Email, user.Image, user.Bio)
 
 	if err != nil {
-        c.JSON(400, gin.H{"error": err.Error()})
+        c.JSON(400, gin.H{"error": err.Error(), "status": "error"})
 		return
 	}
 

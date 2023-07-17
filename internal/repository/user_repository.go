@@ -2,12 +2,13 @@ package repository
 
 import (
 	"github.com/AvinFajarF/internal/entity"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type UserRepository interface {
-	Save(user *entity.UserEntity) error
-	SigIn(email , password string) (*entity.UserEntity, error)
+	Save(user *entity.Users) error
+	SigIn(email , password string) (*entity.Users, error)
 }
 
 type PostgreUserRepository struct {
@@ -21,13 +22,14 @@ func NewPostgreUserRepository(db *gorm.DB) *PostgreUserRepository {
 }
 
 // function ini untuk register repository
-func (r *PostgreUserRepository) Save(user *entity.UserEntity) error {
+func (r *PostgreUserRepository) Save(user *entity.Users) error {
+	user.ID = uuid.NewString()
     return r.db.Create(user).Error
 }
 
 // function ini untuk login repository
-func (r *PostgreUserRepository) SigIn(email, password string) (*entity.UserEntity, error) {
-	var user entity.UserEntity 
+func (r *PostgreUserRepository) SigIn(email, password string) (*entity.Users, error) {
+	var user entity.Users 
 	if err := r.db.Where("email =? and password =?", email, password).First(&user).Error ; err != nil {
 		return nil, err
 	}

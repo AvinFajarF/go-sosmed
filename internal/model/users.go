@@ -2,7 +2,7 @@ package model
 
 import "gorm.io/gorm"
 
-type UsersModel struct {
+type Users struct {
 	gorm.Model
 	ID       string `gorm:"primaryKey"`
 	Username string
