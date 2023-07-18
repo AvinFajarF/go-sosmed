@@ -13,6 +13,7 @@ func NewRouter(userHandler *http.UserHandler) *gin.Engine {
 	v1 := router.Group("api/v1")
 	{
 		v1.POST("/register", userHandler.RegisterUser)
+		v1.POST("/login", userHandler.LoginUser)
 	}
 
 	return router

@@ -8,7 +8,7 @@ import (
 
 type UserRepository interface {
 	Save(user *entity.Users) error
-	SigIn(email , password string) (*entity.Users, error)
+	SigIn(email  string) (*entity.Users, error)
 }
 
 type PostgreUserRepository struct {
@@ -28,9 +28,9 @@ func (r *PostgreUserRepository) Save(user *entity.Users) error {
 }
 
 // function ini untuk login repository
-func (r *PostgreUserRepository) SigIn(email, password string) (*entity.Users, error) {
+func (r *PostgreUserRepository) SigIn(email string) (*entity.Users, error) {
 	var user entity.Users 
-	if err := r.db.Where("email =? and password =?", email, password).First(&user).Error ; err != nil {
+	if err := r.db.Where("email = ? ", email).First(&user).Error ; err != nil {
 		return nil, err
 	}
 	return &user, nil

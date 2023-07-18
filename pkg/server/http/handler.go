@@ -13,7 +13,7 @@ type UserHandler struct {
 	userservice service.UserService
 }
 
-func NewUserService(userservice service.UserService)  *UserHandler {
+func NewUserService(userservice service.UserService) *UserHandler {
 	return &UserHandler{
 		userservice: userservice,
 	}
@@ -22,15 +22,15 @@ func NewUserService(userservice service.UserService)  *UserHandler {
 func (h *UserHandler) RegisterUser(c *gin.Context) {
 	var user entity.Users
 
-	if err := c.ShouldBindJSON(&user); err!= nil {
-        c.JSON(400, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
-    }
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 
 	if err != nil {
-        c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -45,12 +45,28 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "success",
-		"user": result,
+		"result": result,
 	})
 }
 
+func (h *UserHandler) LoginUser(c *gin.Context) {
 
+	var user entity.Users
 
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(400, gin.H{"error": "password atau email yang anda berikan salah", "status": "error"})
+		return
+	}
 
+ err := h.userservice.Login(user.Email, user.Password)
 
+	if err != nil {
+		c.JSON(400, gin.H{"error": "password atau email yang anda berikan salah", "status": "error"})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{
+		"status": "oke",
+	})
+
+}
