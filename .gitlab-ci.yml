@@ -1,0 +1,28 @@
+before_script:
+  - echo "start job at :" `date`
+  - echo "workspace is:" `pwd`
+
+after_script:
+  - echo "done job at :" `date`
+
+
+stages:
+  - test 
+  - build
+  - deploy
+
+testApp:
+  stage: test
+  script:
+   - echo "testing....." :rocket
+
+buildApp:
+  stage: build
+  script:
+   - echo "building....."
+   - go build -o bin/main cmd/main.go
+
+deployApp:
+  stage: deploy
+  script:
+   - echo "deploying....." :airplane
