@@ -20,7 +20,6 @@ buildApp:
   stage: build
   script:
    - echo "building....."
-   - go build -o bin/main cmd/main.go
 
 deployApp:
   stage: deploy
