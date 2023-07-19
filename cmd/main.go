@@ -28,7 +28,11 @@ func main() {
 	userService := service.NewUserService(userRepository)
 	userHandler := http.NewUserService(&userService)
 
-	router := server.NewRouter(userHandler)
+	postRepository := repository.NewPostgrePostRepository(config.DB)
+	postService := service.NewPostService(postRepository)
+	postHandler := http.NewPostService(&postService)
+
+	router := server.NewRouter(userHandler, postHandler)
 
 	router.Run(":8081")
 }

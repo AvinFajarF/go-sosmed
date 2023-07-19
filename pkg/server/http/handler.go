@@ -16,9 +16,19 @@ type UserHandler struct {
 	userservice service.UserService
 }
 
+type PostHandler struct {
+	postservice service.PostService
+}
+
 func NewUserService(userservice service.UserService) *UserHandler {
 	return &UserHandler{
 		userservice: userservice,
+	}
+}
+
+func NewPostService(postservice service.PostService) *PostHandler {
+	return &PostHandler{
+		postservice: postservice,
 	}
 }
 
@@ -72,10 +82,9 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 		"sub": users.ID,
-		})
+	})
 
-
-	tokenString , err := token.SignedString(key)
+	tokenString, err := token.SignedString(key)
 
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.Header("Authorization", tokenString)
@@ -88,5 +97,33 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "oke",
 	})
+
+}
+
+func (p *PostHandler) CreatePost(c *gin.Context) {
+
+	userId, _ := c.Get("id")
+
+	userIdString, _ := userId.(string)
+
+
+	var posts *entity.Posts
+
+	if err := c.ShouldBindJSON(&posts); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := p.postservice.CreatePosts(posts.Title, posts.Description, userIdString)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error(), "status": "error"})
+        return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+        "status": "success",
+        "data": result,
+    })
 
 }

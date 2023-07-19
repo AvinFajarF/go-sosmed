@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(userHandler *http.UserHandler) *gin.Engine {
+func NewRouter(userHandler *http.UserHandler, postHandler *http.PostHandler) *gin.Engine {
 
 	router := gin.Default()
 
@@ -16,7 +16,8 @@ func NewRouter(userHandler *http.UserHandler) *gin.Engine {
 	{
 		v1.POST("/register", userHandler.RegisterUser)
 		v1.POST("/login", userHandler.LoginUser)
-		v1.POST("/tes/:id", middleware.AuthMiddleware, Coba)
+		// v1.POST("/tes/:id", middleware.AuthMiddleware, Coba)
+		v1.POST("/post", middleware.AuthMiddleware, postHandler.CreatePost)
 	}
 
 	return router

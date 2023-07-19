@@ -2,7 +2,6 @@ package config
 
 import (
 	"log"
-
 	"github.com/AvinFajarF/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
