@@ -28,7 +28,7 @@ func (r *PostgreUserRepository) Save(user *entity.Users) error {
 }
 
 // function ini untuk login repository
-func (r *PostgreUserRepository) SigIn(email string) (*entity.Users, error) {
+func (r *PostgreUserRepository) SigIn(email		 string) (*entity.Users, error) {
 	var user entity.Users 
 	if err := r.db.Where("email = ? ", email).First(&user).Error ; err != nil {
 		return nil, err
