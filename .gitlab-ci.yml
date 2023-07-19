@@ -5,6 +5,7 @@ before_script:
 after_script:
   - echo "done job at :" `date`
 
+image: golang:1.20
 
 stages:
   - test 
@@ -20,6 +21,8 @@ buildApp:
   stage: build
   script:
    - echo "building....."
+   - go mod tidy
+   - go build ./...
 
 deployApp:
   stage: deploy
