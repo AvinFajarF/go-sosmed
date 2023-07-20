@@ -7,6 +7,7 @@ import (
 
 type PostService interface {
 	CreatePosts(title, description, user_id string) (*entity.Posts, error)
+	GetPosts() (*entity.Posts, error)
 }
 
 type postService struct {
@@ -30,4 +31,14 @@ func (ps postService) CreatePosts(title, description, user_id string) (*entity.P
 	}
 
 	return post, nil
+}
+
+func (ps postService) GetPosts() (*entity.Posts, error) {
+	result, err := ps.repo.Get()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
