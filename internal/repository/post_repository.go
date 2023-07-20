@@ -2,12 +2,14 @@ package repository
 
 import (
 	"github.com/AvinFajarF/internal/entity"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type PostRepository interface {
 	Create(post *entity.Posts) error
 	Get() (post *entity.Posts, err error)
+	// Delete(id int)
 }
 
 type PostgrePostssRepository struct {
@@ -21,6 +23,7 @@ func NewPostgrePostRepository(db *gorm.DB) *PostgrePostssRepository {
 }
 
 func (r *PostgrePostssRepository) Create(post *entity.Posts) error {
+	post.ID = uuid.NewString()
     return r.db.Create(post).Error
 }
 

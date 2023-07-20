@@ -127,3 +127,21 @@ func (p *PostHandler) CreatePost(c *gin.Context) {
     })
 
 }
+
+
+func (p *PostHandler) GetPosts(c *gin.Context) {
+	result, err := p.postservice.GetPosts()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+		"status": "error",
+        "error": err.Error(),
+        })
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+			"status": "success",
+			"data": result,
+		})
+
+}
