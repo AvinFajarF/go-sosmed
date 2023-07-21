@@ -3,11 +3,14 @@ package service
 import (
 	"github.com/AvinFajarF/internal/entity"
 	"github.com/AvinFajarF/internal/repository"
+	"github.com/gin-gonic/gin"
 )
 
 type PostService interface {
 	CreatePosts(title, description, user_id string) (*entity.Posts, error)
-	GetPosts() (*entity.Posts, error)
+	FindUserById(userId string, c *gin.Context) error
+	GetPosts(userId string, c *gin.Context) ([]entity.Posts, error)
+	DeletePost(id string) error
 }
 
 type postService struct {
@@ -33,12 +36,33 @@ func (ps postService) CreatePosts(title, description, user_id string) (*entity.P
 	return post, nil
 }
 
-func (ps postService) GetPosts() (*entity.Posts, error) {
-	result, err := ps.repo.Get()
+func (ps postService) GetPosts(userId string, c *gin.Context) ([]entity.Posts, error) {
+	result, err := ps.repo.Get(userId, c)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return result, nil
+}
+
+func (ps postService) DeletePost(id string) error {
+
+	err := ps.repo.Delete(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ps postService) FindUserById(userId string, c *gin.Context) error {
+	err := ps.repo.FindUserId(userId, c)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -130,7 +130,11 @@ func (p *PostHandler) CreatePost(c *gin.Context) {
 
 
 func (p *PostHandler) GetPosts(c *gin.Context) {
-	result, err := p.postservice.GetPosts()
+	userId, _ := c.Get("id")
+
+	userIdString, _ := userId.(string)
+	
+	result, err := p.postservice.GetPosts(userIdString, c)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -143,5 +147,9 @@ func (p *PostHandler) GetPosts(c *gin.Context) {
 			"status": "success",
 			"data": result,
 		})
+
+}
+
+func (p *PostHandler) DeletePost(c *gin.Context) {
 
 }
