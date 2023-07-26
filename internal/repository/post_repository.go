@@ -33,7 +33,7 @@ func (r *PostgrePostssRepository) Create(post *entity.Posts) error {
 
 func (r *PostgrePostssRepository) FindUserId(userId string, c *gin.Context) error {
 	log.Println(userId)
-	return r.db.Where("user_id =?", userId).Find(&entity.Posts{}).Error
+	return r.db.Where("user_id = ? ", userId).Find(&entity.Posts{}).Error
 }
 
 func (r *PostgrePostssRepository) Get(userId string, c *gin.Context) (post []entity.Posts, err error) {

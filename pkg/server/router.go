@@ -19,6 +19,7 @@ func NewRouter(userHandler *http.UserHandler, postHandler *http.PostHandler) *gi
 		// v1.POST("/tes/:id", middleware.AuthMiddleware, Coba)
 		v1.POST("/post", middleware.AuthMiddleware, postHandler.CreatePost)
 		v1.GET("/posts", middleware.AuthMiddleware, postHandler.GetPosts)
+		v1.DELETE("/post/delete/:id", middleware.AuthMiddleware, postHandler.DeletePost)
 	}
 
 	return router

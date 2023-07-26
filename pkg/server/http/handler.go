@@ -152,4 +152,31 @@ func (p *PostHandler) GetPosts(c *gin.Context) {
 
 func (p *PostHandler) DeletePost(c *gin.Context) {
 
+	userId, _ := c.Get("id")
+	userIdString, _ := userId.(string)
+
+	postId := c.Param("id")
+
+	if err := p.postservice.FindUserById(userIdString, c); err != nil {
+		c.JSON(401, gin.H{
+			"status": "error",
+			"message": "Unauthorized",
+		})
+		return
+	}
+
+	if error := p.postservice.DeletePost(postId); error != nil {
+		c.JSON(401, gin.H{
+			"status": "error",
+			"message": "Error ketika menghapus post",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"status" : "success",
+		"message": "Success ketika menghapus post",
+	})
+
+
 }
