@@ -11,6 +11,7 @@ type PostService interface {
 	FindUserById(userId string, c *gin.Context) error
 	GetPosts(userId string, c *gin.Context) ([]entity.Posts, error)
 	DeletePost(id string) error
+	UpdatePost(id string, title, description string) error
 }
 
 type postService struct {
@@ -64,5 +65,19 @@ func (ps postService) FindUserById(userId string, c *gin.Context) error {
 		return err
 	}
 
+	return nil
+}
+
+func (ps postService) UpdatePost(id string, title, description string) error {
+
+	post := &entity.Posts{
+		ID:          id,
+		Title:       title,
+		Description: description,
+	}
+
+	if err := ps.repo.Update(id, post); err != nil {
+		return err
+	}
 	return nil
 }

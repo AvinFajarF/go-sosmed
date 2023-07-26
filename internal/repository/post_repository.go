@@ -14,6 +14,7 @@ type PostRepository interface {
 	FindUserId(userId string, c *gin.Context) error
 	Get(userId string, c *gin.Context) (post []entity.Posts, err error)
 	Delete(id string) error
+	Update(id string, data *entity.Posts) error
 }
 
 type PostgrePostssRepository struct {
@@ -43,4 +44,8 @@ func (r *PostgrePostssRepository) Get(userId string, c *gin.Context) (post []ent
 
 func (r *PostgrePostssRepository) Delete(id string) error {
 	return r.db.Where("id = ?", id).Delete(&entity.Posts{}).Error
+}
+
+func (r *PostgrePostssRepository) Update(id string, data *entity.Posts) error {
+	return r.db.Where("id = ?", id).Updates(data).Error
 }
