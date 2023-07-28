@@ -34,5 +34,5 @@ func main() {
 
 	router := server.NewRouter(userHandler, postHandler)
 
-	router.Run(":8081")
+	router.Run(":8080")
 }
